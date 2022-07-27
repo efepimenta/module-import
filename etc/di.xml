@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="customer-import" xsi:type="object">Fabio\Import\Console\CustomerImport</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Fabio\Import\Console\ProcessorFactoryInterface"
+                type="Fabio\Import\Console\ProcessorFactory"/>
+
+    <!-- Logger virtual type  -->
+    <virtualType name="ImportVirtualLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object">ImportVirtualLoggerHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- Handler virtual type  -->
+    <virtualType name="ImportVirtualLoggerHandler" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">var/log/fabio_import.log</argument>
+        </arguments>
+    </virtualType>
+<!--    Apply logger-->
+    <type name="Fabio\Import\Console\CustomerImport">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImportVirtualLogger</argument>
+        </arguments>
+    </type>
+    <type name="Fabio\Import\Model\Services\CustomerService">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImportVirtualLogger</argument>
+        </arguments>
+    </type>
+    <type name="Fabio\Import\Model\AbstractProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImportVirtualLogger</argument>
+        </arguments>
+    </type>
+    <type name="Fabio\Import\Console\ImportValidator">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImportVirtualLogger</argument>
+        </arguments>
+    </type>
+    <type name="Fabio\Import\Console\ProcessorFactory">
+        <arguments>
+            <argument name="logger" xsi:type="object">ImportVirtualLogger</argument>
+        </arguments>
+    </type>
+
+</config>
