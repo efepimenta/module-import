@@ -4,7 +4,7 @@
 
 ### usage:
 - install module
-    - composer require efepimenta/seila 1.0.0
+    - composer require efepimenta/module-import ^1.0
 - run bin/magento setup:upgrade
 - run bin/magento setup:di:compile
 - run bin/magento customer:import <TYPE> <FILE>
